@@ -1,5 +1,4 @@
 # Bắt đầu làm
-![ảnh](https://user-images.githubusercontent.com/20945393/115722846-99cbc180-a3a9-11eb-8dba-12daef429745.png)
 # Suy đoán lỗi có thể khai thác
 Ta sẽ nhận ra một dòng lệnh kiến cho ta có thể đưa các shell code vào là shell_exec($_GET[‘cmd’]);
 # Khai thác lỗi
