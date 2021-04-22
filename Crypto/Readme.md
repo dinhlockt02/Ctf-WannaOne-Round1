@@ -63,3 +63,5 @@ print("end")
 ```
 ## Kêt quả
 Ta tìm được một file flag.png là flag cần tìm.
+![result](https://user-images.githubusercontent.com/20945393/115727944-427c2000-a3ae-11eb-80fb-22c3d0330d98.png)
+
